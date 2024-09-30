@@ -1,0 +1,199 @@
+[
+    {
+        "label": "json",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "json",
+        "description": "json",
+        "detail": "json",
+        "documentation": {}
+    },
+    {
+        "label": "socket",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "socket",
+        "description": "socket",
+        "detail": "socket",
+        "documentation": {}
+    },
+    {
+        "label": "UDPClient",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "UDPClient",
+        "description": "UDPClient",
+        "detail": "UDPClient",
+        "documentation": {}
+    },
+    {
+        "label": "View",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "View",
+        "description": "View",
+        "detail": "View",
+        "documentation": {}
+    },
+    {
+        "label": "rsa",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "rsa",
+        "description": "rsa",
+        "detail": "rsa",
+        "documentation": {}
+    },
+    {
+        "label": "pickle",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "pickle",
+        "description": "pickle",
+        "detail": "pickle",
+        "documentation": {}
+    },
+    {
+        "label": "threading",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "threading",
+        "description": "threading",
+        "detail": "threading",
+        "documentation": {}
+    },
+    {
+        "label": "Path",
+        "importPath": "pathlib",
+        "description": "pathlib",
+        "isExtraImport": true,
+        "detail": "pathlib",
+        "documentation": {}
+    },
+    {
+        "label": "readInfoServer",
+        "kind": 2,
+        "importPath": "clientA.Controller",
+        "description": "clientA.Controller",
+        "peekOfCode": "def readInfoServer():\n    with open('../infoServer.json', 'r') as file:\n        data = json.load(file)\n    return [data['ipServer'], data['portServer']]\ndef getIpPortClient():\n    #ipClient = socket.gethostbyname( socket.gethostname() )\n    ipClient = \"127.0.0.1\"\n    portClient = 6000\n    return [ipClient, portClient]\n# JSON",
+        "detail": "clientA.Controller",
+        "documentation": {}
+    },
+    {
+        "label": "getIpPortClient",
+        "kind": 2,
+        "importPath": "clientA.Controller",
+        "description": "clientA.Controller",
+        "peekOfCode": "def getIpPortClient():\n    #ipClient = socket.gethostbyname( socket.gethostname() )\n    ipClient = \"127.0.0.1\"\n    portClient = 6000\n    return [ipClient, portClient]\n# JSON\ndef createJson(method, data):\n    jsonData = {\n        \"method\": method,\n        \"data\": data",
+        "detail": "clientA.Controller",
+        "documentation": {}
+    },
+    {
+        "label": "createJson",
+        "kind": 2,
+        "importPath": "clientA.Controller",
+        "description": "clientA.Controller",
+        "peekOfCode": "def createJson(method, data):\n    jsonData = {\n        \"method\": method,\n        \"data\": data\n    }\n    jsonString = json.dumps(jsonData)\n    return jsonString.encode('utf-8')\ndef getInfoClient():\n    try:\n        with open(\"./infoClient.json\", 'r') as file:",
+        "detail": "clientA.Controller",
+        "documentation": {}
+    },
+    {
+        "label": "getInfoClient",
+        "kind": 2,
+        "importPath": "clientA.Controller",
+        "description": "clientA.Controller",
+        "peekOfCode": "def getInfoClient():\n    try:\n        with open(\"./infoClient.json\", 'r') as file:\n            data = json.load(file)\n    except (FileNotFoundError, json.JSONDecodeError, KeyError) as e:\n        print(f\"Error on file infoClient: {e}\")\n        data = {\n            \"info\": {\n                \"ip\": \"NULL\",\n                \"name\": \"NULL\",",
+        "detail": "clientA.Controller",
+        "documentation": {}
+    },
+    {
+        "label": "test",
+        "kind": 2,
+        "importPath": "clientA.Controller",
+        "description": "clientA.Controller",
+        "peekOfCode": "def test():\n    print(createJson(\"is\", \"da asdsa\"))\n# Function main\nif __name__ == \"__main__\":\n    # Read config and info\n    ipServer, portServer = readInfoServer()\n    ipClient, portClient = getIpPortClient()\n    portServer, portClient = int(portServer), int(portClient)\n    infoClient = getInfoClient()\n    lastData = \"\"",
+        "detail": "clientA.Controller",
+        "documentation": {}
+    },
+    {
+        "label": "encryptMsg",
+        "kind": 2,
+        "importPath": "clientA.otros",
+        "description": "clientA.otros",
+        "peekOfCode": "def encryptMsg(self, msg):\n    return rsa.encrypt(msg.encode(), self.priKey)\ndef decryptMsg(self, data):\n    return rsa.decrypt(data, self.pubKey).decode()\n# For keys\ndef generateKeys(self):\n    private_key, public_key = rsa.newkeys(512)\n    file_pri = open('clientA/privKeyUserA.txt', 'wb')\n    pickle.dump(private_key, file_pri)\n    file_pri.close()",
+        "detail": "clientA.otros",
+        "documentation": {}
+    },
+    {
+        "label": "decryptMsg",
+        "kind": 2,
+        "importPath": "clientA.otros",
+        "description": "clientA.otros",
+        "peekOfCode": "def decryptMsg(self, data):\n    return rsa.decrypt(data, self.pubKey).decode()\n# For keys\ndef generateKeys(self):\n    private_key, public_key = rsa.newkeys(512)\n    file_pri = open('clientA/privKeyUserA.txt', 'wb')\n    pickle.dump(private_key, file_pri)\n    file_pri.close()\n    file_pub = open('clientA/pubKeyUserA.txt', 'wb')\n    pickle.dump(public_key, file_pub)",
+        "detail": "clientA.otros",
+        "documentation": {}
+    },
+    {
+        "label": "generateKeys",
+        "kind": 2,
+        "importPath": "clientA.otros",
+        "description": "clientA.otros",
+        "peekOfCode": "def generateKeys(self):\n    private_key, public_key = rsa.newkeys(512)\n    file_pri = open('clientA/privKeyUserA.txt', 'wb')\n    pickle.dump(private_key, file_pri)\n    file_pri.close()\n    file_pub = open('clientA/pubKeyUserA.txt', 'wb')\n    pickle.dump(public_key, file_pub)\n    file_pub.close()\ndef readKeys(self):\n    file_pri_c = open('clientA/privKeyUserA.txt', 'rb')",
+        "detail": "clientA.otros",
+        "documentation": {}
+    },
+    {
+        "label": "readKeys",
+        "kind": 2,
+        "importPath": "clientA.otros",
+        "description": "clientA.otros",
+        "peekOfCode": "def readKeys(self):\n    file_pri_c = open('clientA/privKeyUserA.txt', 'rb')\n    self.priKey = pickle.load(file_pri_c)\n    file_pri_c.close()\n    file_pub_c = open('clientA/pubKeyUserA.txt', 'rb')\n    self.pubKey = pickle.load(file_pub_c)\n    file_pub_c.close()\n    file_pub_c_B = open('clientB/pubKeyUserB.txt', 'rb')\n    self.pubKeyB = pickle.load(file_pub_c_B)\n    file_pub_c_B.close()",
+        "detail": "clientA.otros",
+        "documentation": {}
+    },
+    {
+        "label": "saveKeyFromUser",
+        "kind": 2,
+        "importPath": "clientA.otros",
+        "description": "clientA.otros",
+        "peekOfCode": "def saveKeyFromUser(public_key):\n    file_pub = open('clientA/pubKeyUserB.txt', 'wb')\n    pickle.dump(public_key, file_pub)\n    file_pub.close()\ndef readKeyFromUser():\n    file_pub = open('clientA/pubKeyUserB.txt', 'rb')\n    key = pickle.load(file_pub)\n    file_pub.close()\n    return key",
+        "detail": "clientA.otros",
+        "documentation": {}
+    },
+    {
+        "label": "readKeyFromUser",
+        "kind": 2,
+        "importPath": "clientA.otros",
+        "description": "clientA.otros",
+        "peekOfCode": "def readKeyFromUser():\n    file_pub = open('clientA/pubKeyUserB.txt', 'rb')\n    key = pickle.load(file_pub)\n    file_pub.close()\n    return key",
+        "detail": "clientA.otros",
+        "documentation": {}
+    },
+    {
+        "label": "UDPClient",
+        "kind": 6,
+        "importPath": "clientA.UDPClient",
+        "description": "clientA.UDPClient",
+        "peekOfCode": "class UDPClient:\n    def __init__(self, server_ip, server_port, local_ip, local_port):\n        \"\"\"\n        Initialize the UDP Client with server IP and port.\n        :param server_ip: The IP address of the server.\n        :param server_port: The port number of the server.\n        :param local_ip: The IP address of the client.\n        :param local_port: The port number of the client.\n        \"\"\"\n        self.server_ip = server_ip",
+        "detail": "clientA.UDPClient",
+        "documentation": {}
+    },
+    {
+        "label": "showView",
+        "kind": 2,
+        "importPath": "clientA.View",
+        "description": "clientA.View",
+        "peekOfCode": "def showView(data):\n    for info in data:\n        print(info)",
+        "detail": "clientA.View",
+        "documentation": {}
+    },
+    {
+        "label": "UDPServer",
+        "kind": 6,
+        "importPath": "serverTest",
+        "description": "serverTest",
+        "peekOfCode": "class UDPServer:\n    def __init__(self, host, port):\n        self.host = host\n        self.port = port\n        self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)\n        self.server_socket.bind((self.host, self.port))\n        print(f\"UDP Server initialized and listening on {self.host}:{self.port}\")\n    def listen(self, buffer_size=1024):\n        try:\n            print(\"Waiting for messages from clients...\")",
+        "detail": "serverTest",
+        "documentation": {}
+    }
+]
