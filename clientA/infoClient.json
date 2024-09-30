@@ -1,10 +1,9 @@
 {
-    "info": {
-        "ip": "1",
-        "name": "NULL",
-        "number": "NULL",
-        "timeCreation": "NULL"
-    },
+    "id": "-1",
+    "name": "",
+    "phone": "",
+    "timeCreation": "",
+
     "friends": {
         
     },

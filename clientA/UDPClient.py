@@ -49,7 +49,7 @@ class UDPClient:
                 data, addr = self.client_socket.recvfrom(buffer_size)
                 jsonData = data.decode('utf-8')
                 self.lastData = json.loads(jsonData)
-                #print(f"\nMessage received from {addr}: {data}")
+                print(f"\nMessage received from {addr}: {data}")
         except Exception as e:
             print(f"Error receiving message: {e}")
 

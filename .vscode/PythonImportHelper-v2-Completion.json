@@ -71,47 +71,11 @@
         "documentation": {}
     },
     {
-        "label": "readInfoServer",
-        "kind": 2,
+        "label": "Controller",
+        "kind": 6,
         "importPath": "clientA.Controller",
         "description": "clientA.Controller",
-        "peekOfCode": "def readInfoServer():\n    with open('../infoServer.json', 'r') as file:\n        data = json.load(file)\n    return [data['ipServer'], data['portServer']]\ndef getIpPortClient():\n    #ipClient = socket.gethostbyname( socket.gethostname() )\n    ipClient = \"127.0.0.1\"\n    portClient = 6000\n    return [ipClient, portClient]\n# JSON",
-        "detail": "clientA.Controller",
-        "documentation": {}
-    },
-    {
-        "label": "getIpPortClient",
-        "kind": 2,
-        "importPath": "clientA.Controller",
-        "description": "clientA.Controller",
-        "peekOfCode": "def getIpPortClient():\n    #ipClient = socket.gethostbyname( socket.gethostname() )\n    ipClient = \"127.0.0.1\"\n    portClient = 6000\n    return [ipClient, portClient]\n# JSON\ndef createJson(method, data):\n    jsonData = {\n        \"method\": method,\n        \"data\": data",
-        "detail": "clientA.Controller",
-        "documentation": {}
-    },
-    {
-        "label": "createJson",
-        "kind": 2,
-        "importPath": "clientA.Controller",
-        "description": "clientA.Controller",
-        "peekOfCode": "def createJson(method, data):\n    jsonData = {\n        \"method\": method,\n        \"data\": data\n    }\n    jsonString = json.dumps(jsonData)\n    return jsonString.encode('utf-8')\ndef getInfoClient():\n    try:\n        with open(\"./infoClient.json\", 'r') as file:",
-        "detail": "clientA.Controller",
-        "documentation": {}
-    },
-    {
-        "label": "getInfoClient",
-        "kind": 2,
-        "importPath": "clientA.Controller",
-        "description": "clientA.Controller",
-        "peekOfCode": "def getInfoClient():\n    try:\n        with open(\"./infoClient.json\", 'r') as file:\n            data = json.load(file)\n    except (FileNotFoundError, json.JSONDecodeError, KeyError) as e:\n        print(f\"Error on file infoClient: {e}\")\n        data = {\n            \"info\": {\n                \"ip\": \"NULL\",\n                \"name\": \"NULL\",",
-        "detail": "clientA.Controller",
-        "documentation": {}
-    },
-    {
-        "label": "test",
-        "kind": 2,
-        "importPath": "clientA.Controller",
-        "description": "clientA.Controller",
-        "peekOfCode": "def test():\n    print(createJson(\"is\", \"da asdsa\"))\n# Function main\nif __name__ == \"__main__\":\n    # Read config and info\n    ipServer, portServer = readInfoServer()\n    ipClient, portClient = getIpPortClient()\n    portServer, portClient = int(portServer), int(portClient)\n    infoClient = getInfoClient()\n    lastData = \"\"",
+        "peekOfCode": "class Controller:\n    def __init__(self):\n        self.ipServer, self.portServer = self.readInfoServer()\n        self.ipClient, self.portClient = self.getIpPortClient()\n        self.portServer, self.portClient = int(self.portServer), int(self.portClient)\n        self.infoClient = self.getInfoClient()\n        self.lastData = \"\"\n        self.client = UDPClient.UDPClient(self.ipServer, self.portServer, self.ipClient, self.portClient)\n    # Función para leer la información del servidor desde un archivo JSON\n    def readInfoServer(self):",
         "detail": "clientA.Controller",
         "documentation": {}
     },
@@ -179,11 +143,11 @@
         "documentation": {}
     },
     {
-        "label": "showView",
-        "kind": 2,
+        "label": "View",
+        "kind": 6,
         "importPath": "clientA.View",
         "description": "clientA.View",
-        "peekOfCode": "def showView(data):\n    for info in data:\n        print(info)",
+        "peekOfCode": "class View:\n    def show(self, data):\n        user_inputs = {}\n        print(\"Por favor, ingrese la siguiente información:\")\n        for field in data:\n            user_input = input(f\"Ingrese el {field}: \")\n            user_inputs[field] = user_input  # Guardar la entrada del usuario en un diccionario\n        return user_inputs",
         "detail": "clientA.View",
         "documentation": {}
     },
