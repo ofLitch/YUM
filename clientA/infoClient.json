@@ -1,13 +1,8 @@
 {
-    "id": "-1",
-    "name": "",
-    "phone": "",
-    "timeCreation": "",
-
-    "friends": {
-        
-    },
-    "groups": {
-        
-    }
+    "id": "46",
+    "name": "Otre",
+    "phone": "311",
+    "timeCreation": "2024-10-01 17:11:32",
+    "friends": {},
+    "groups": {}
 }

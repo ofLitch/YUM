@@ -27,7 +27,7 @@ class Controller:
     # Función para obtener la IP y el puerto del cliente
     def getIpPortClient(self):
         ipClient = "127.0.0.1"
-        portClient = 6000
+        portClient = 7000
         return [ipClient, portClient]
 
     # Función para crear un JSON
