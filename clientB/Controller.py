@@ -104,107 +104,246 @@ class Controller:
         self.infoClient = data
         
     def login(self, view, id):
-        jsonData = self.createJson("log_in", "id", id)
-        self.client.send_data(jsonData)
-        
-        # Primer Menu
-        time.sleep(0.5)
-        responseTopic = view.show_menu(self.client.lastData)
-        jsonData = self.createJson("log_in", "option", responseTopic)
-        self.client.send_data(jsonData)
-        
-        # Segundo Menu
-        time.sleep(0.5)
-        response = view.show_menu(self.client.lastData)
-        jsonData = self.createJson("log_in", "option", response)
-        self.client.send_data(jsonData)
-        
-        if responseTopic == '1':
-            # Users
-            if response == '1':
-                # Delete
-                with open("./infoClient.json", 'r') as file:
-                    data = json.load(file)
-                
-                # Actualizar los datos con la nueva información
-                data['id'] = '-1'
-                data['name'] = ""
-                data['phone'] = ""
-                data['timeCreation'] = ""
-
-                # Sobrescribir el archivo con los datos actualizados
-                with open("./infoClient.json", 'w') as file:
-                    json.dump(data, file, indent=4)
-
-                # Actualizar self.infoClient para reflejar los nuevos datos
-                self.infoClient = data
-            if response == '2':
-                print(2)
-                # Update
-                time.sleep(0.5)
-                responseNameOrPhone = view.show_menu(self.client.lastData) # Name or phone
-                jsonData = self.createJson("log_in", "option", responseNameOrPhone)
+        while True:
+            # Primer Menu
+            time.sleep(0.1)
+            jsonData = self.createJson('login','','')
+            self.client.send_data(jsonData)
+            
+            time.sleep(0.1)
+            responseTopic = view.show_menu(self.client.lastData)
+            if responseTopic == '1':
+                jsonData = self.createJson("getMenuFunc", "id", id)
                 self.client.send_data(jsonData)
-                
-                time.sleep(0.5)
-                responseChange = view.show_menu(self.client.lastData) # Change
-                jsonData = self.createJson("log_in", "option", responseChange)
-                self.client.send_data(jsonData)
-                
-                time.sleep(0.5)
-                if self.client.lastData == "200 OK":
-                    if responseNameOrPhone == '1':
-                        with open("./infoClient.json", 'r') as file:
-                            data = json.load(file)
-                        
-                        # Actualizar los datos con la nueva información
-                        data['name'] = responseChange
-
-                        # Sobrescribir el archivo con los datos actualizados
-                        with open("./infoClient.json", 'w') as file:
-                            json.dump(data, file, indent=4)
-
-                        # Actualizar self.infoClient para reflejar los nuevos datos
-                        self.infoClient = data
-                        
-                    if responseNameOrPhone == '2':
-                        with open("./infoClient.json", 'r') as file:
-                            data = json.load(file)
-                        
-                        # Actualizar los datos con la nueva información
-                        data['phone'] = responseChange
-
-                        # Sobrescribir el archivo con los datos actualizados
-                        with open("./infoClient.json", 'w') as file:
-                            json.dump(data, file, indent=4)
-
-                        # Actualizar self.infoClient para reflejar los nuevos datos
-                        self.infoClient = data
-            if response == '3':
-                time.sleep(0.5)
-                response = view.show_menu(self.client.lastData) # Name or phone
-                jsonData = self.createJson("log_in", "IP", response)
-                self.client.send_data(jsonData)
-                
-                time.sleep(0.5)
-                response = view.show_menu(self.client.lastData) # Name or phone
-                jsonData = self.createJson("log_in", "PORT", response)
-                self.client.send_data(jsonData)
-                
-                self.readKeys()
                 time.sleep(0.1)
-                if  self.client.lastData.get('answer') == "200 OK":
-                    view.showMsg("Connection success")
-                    while  True:
-                        msg = view.showMsgToUser()
-                        print(msg, 1)
-                        msg = rsa.encrypt(msg.encode('utf-8'), self.priKey)
-                        print(msg)
-                        self.client.send_data(msg)
+                response = view.show_menu(self.client.lastData)
+                # Users
+                if response == '1':
+                    # Delete
+                    response = "deleteUser"
+                    jsonData = self.createJson("log_in", "option", response)
+                    self.client.send_data(jsonData)
+                    with open("./infoClient.json", 'r') as file:
+                        data = json.load(file)
 
-            #if response == '4':
-            #if response == '5':
-                
+                    # Actualizar los datos con la nueva información
+                    data['id'] = '-1'
+                    data['name'] = ""
+                    data['phone'] = ""
+                    data['timeCreation'] = ""
+
+                    # Sobrescribir el archivo con los datos actualizados
+                    with open("./infoClient.json", 'w') as file:
+                        json.dump(data, file, indent=4)
+
+                    # Actualizar self.infoClient para reflejar los nuevos datos
+                    self.infoClient = data
+                if response == '2':
+                    jsonData = self.createJson("updateUser", "id", self.infoClient.get('id'))
+                    self.client.send_data(jsonData)
+                    
+                    time.sleep(0.1)
+                    responseNameOrPhone = view.show_menu(self.client.lastData)  # Name or phone
+                    jsonData = self.createJson("updateUser", "option", responseNameOrPhone)
+                    self.client.send_data(jsonData)
+
+                    time.sleep(0.1)
+                    responseChange = view.show_menu(self.client.lastData)  # Change
+                    jsonData = self.createJson("updateUser", "option", responseChange)
+                    self.client.send_data(jsonData)
+
+                    time.sleep(0.1)
+                    if self.client.lastData.get('answer') == "200 OK":
+                        print(2)
+                        if responseNameOrPhone == '1':
+                            with open("./infoClient.json", 'r') as file:
+                                data = json.load(file)
+
+                            # Actualizar los datos con la nueva información
+                            data['name'] = responseChange
+
+                            # Sobrescribir el archivo con los datos actualizados
+                            with open("./infoClient.json", 'w') as file:
+                                json.dump(data, file, indent=4)
+
+                            # Actualizar self.infoClient para reflejar los nuevos datos
+                            self.infoClient = data
+
+                        if responseNameOrPhone == '2':
+                            with open("./infoClient.json", 'r') as file:
+                                data = json.load(file)
+
+                            # Actualizar los datos con la nueva información
+                            data['phone'] = responseChange
+
+                            # Sobrescribir el archivo con los datos actualizados
+                            with open("./infoClient.json", 'w') as file:
+                                json.dump(data, file, indent=4)
+
+                            # Actualizar self.infoClient para reflejar los nuevos datos
+                            self.infoClient = data
+                if response == '3':
+                    jsonData = self.createJson("messageUser", "", "")
+                    self.client.send_data(jsonData)
+                    
+                    time.sleep(0.1)
+                    response = view.show_menu(self.client.lastData)  # Name or phone
+                    jsonData = self.createJson("messageUser", "IP", response)
+                    self.client.send_data(jsonData)
+
+                    time.sleep(0.1)
+                    response = view.show_menu(self.client.lastData)  # Name or phone
+                    jsonData = self.createJson("messageUser", "PORT", response)
+                    self.client.send_data(jsonData)
+
+                    self.readKeys()
+                    time.sleep(0.1)
+                    if self.client.lastData.get('answer') == "200 OK":
+                        view.showMsg("Connection success")
+                        while True:
+                            # Verificar si hay nuevos datos recibidos
+                            if self.lastData != self.client.lastData:
+                                self.lastData = self.client.lastData
+
+                                # Separar el mensaje cifrado del teléfono
+                                encrypted_msg, id = self.parseReceivedData(self.client.lastData)
+
+                                # Cargar la llave pública del archivo <phone>KeyPublic.txt
+                                public_key = self.loadPublicKey(id)
+
+                                if public_key:
+                                    try:
+                                        # Descifrar el mensaje usando la llave pública correspondiente
+                                        decrypted_msg = rsa.decrypt(encrypted_msg, public_key)
+                                        view.showMsg(decrypted_msg.decode('utf-8'))  # Mostrar el mensaje descifrado
+                                    except Exception as e:
+                                        print(f"Error al descifrar el mensaje: {e}")
+                                else:
+                                    print(f"Error: No se encontró la llave pública para el teléfono {id}")
+
+                            msg = view.showMsgToUser() 
+                            encrypted_msg = rsa.encrypt(msg.encode('utf-8'), self.priKey) 
+
+                            self.client.send_data(encrypted_msg + b"|||" + self.infoClient.get('id').encode('utf-8'))
+                if response == '4':
+                    jsonData = self.createJson("readDataUser", "id", self.infoClient.get('id'))
+                    self.client.send_data(jsonData)
+                    time.sleep(0.1)
+                    view.showInfo(self.client.lastData)
+
+            if responseTopic == '2':
+                if response == '1':
+                    response = "deleteGroup"
+                    jsonData = self.createJson("log_in", "option", response)
+                    self.client.send_data(jsonData)
+                    responseIDG = view.show_menu(self.client.lastData)
+                    jsonData = self.createJson("log_in", "id", responseIDG)
+                    self.client.send_data(jsonData)
+                    print(self.client.lastData.get('answer'))
+                if response == '2':
+                    response = "updateGroup"
+                    jsonData = self.createJson("log_in", "option", response)
+                    self.client.send_data(jsonData)
+                    responseIDG = view.show_menu(self.client.lastData)
+                    jsonData = self.createJson("log_in", "name", responseIDG)
+                    self.client.send_data(jsonData)
+                    print(self.client.lastData.get('answer'))
+
+                if response == '3':
+                    response = "createGroup"
+                    jsonData = self.createJson("log_in", "option", response)
+                    self.client.send_data(jsonData)
+                    responseIDG = view.show_menu(self.client.lastData)
+                    jsonData = self.createJson("log_in", "id", responseIDG)
+                    self.client.send_data(jsonData)
+                    print(self.client.lastData.get('answer'))
+
+                if response == '4':
+                    response = "readGroup"
+                    jsonData = self.createJson("log_in", "option", response)
+                    self.client.send_data(jsonData)
+                    
+            if responseTopic == '3':
+                # Segundo Menu
+                jsonData = self.createJson("getMenuFunc3Table", "id", id)
+                self.client.send_data(jsonData)
+
+                # Segundo Menu
+                time.sleep(0.5)
+                response = view.show_menu(self.client.lastData)
+                if response == '1':
+                    jsonData = self.createJson("deleteFriend", "id", id)
+                    self.client.send_data(jsonData)
+                    responseID = view.show_menu(self.client.lastData)
+                    jsonData = self.createJson("log_in", "id", responseID)
+                    self.client.send_data(jsonData)
+                    print(self.client.lastData.get('answer'))
+                if response == '2':
+                    jsonData = self.createJson("updateFriend", "id", id)
+                    self.client.send_data(jsonData)
+                    responseID = view.show_menu(self.client.lastData)
+                    jsonData = self.createJson("log_in", "id", responseID)
+                    self.client.send_data(jsonData)
+                    responseMessg= view.show_menu(self.client.lastData)
+                    jsonData = self.createJson("log_in", "change", responseMessg)
+                    self.client.send_data(jsonData)
+
+                    print(self.client.lastData.get('answer'))
+
+                if response == '3':  ## revisar con el controller
+                    jsonData = self.createJson("createFriend", "id", id)
+                    self.client.send_data(jsonData)
+
+                    responseIDG = view.show(self.client.lastData)
+                    jsonData = self.createJson("createFriend", "id_relationship", responseIDG)
+                    self.client.send_data(jsonData)
+
+                    responseN = view.show(self.client.lastData)
+                    jsonData = self.createJson("createFriend", "id_friend", responseN)
+                    self.client.send_data(jsonData)
+                    
+                    time.sleep(0.1)
+                    with open('infoClient.json', 'r') as file:
+                        data = json.load(file)
+                        
+                    # Crear un nuevo ID para el nuevo amigo (por ejemplo, usar el "id" como clave)
+                    friend_id = self.client.lastData.get("id")
+                    
+                    # Agregar el nuevo amigo al diccionario de "friends"
+                    data["friends"][friend_id] = self.client.lastData
+
+                    # Guardar de nuevo los cambios en el archivo
+                    with open('infoClient.json', 'w') as file:
+                        json.dump(data, file, indent=4)
+                if response == '4':
+                    jsonData = self.createJson("readFriend", "id", id)
+                    self.client.send_data(jsonData)
+
+                    responseF = view.show(self.client.lastData)
+                    jsonData = self.createJson("log_in", "id_relationship", responseF)
+                    self.client.send_data(jsonData)
+
+            
+    def parseReceivedData(self, data):
+        """Función para dividir el mensaje cifrado y el teléfono."""
+        try:
+            encrypted_msg, id = data.split("|||")
+            return encrypted_msg, id
+        except ValueError:
+            print("Error: El formato del mensaje recibido es incorrecto.")
+            return None, None
+
+    def loadPublicKey(self, id):
+        """Función para cargar la llave pública del archivo <id>KeyPublic.txt."""
+        try:
+            with open(f'./{id}KeyPublic.txt', 'rb') as file_pub:
+                public_key = pickle.load(file_pub)
+                return public_key
+        except FileNotFoundError:
+            print(f"No se encontró el archivo de la llave pública para {id}")
+            return None
+    
+    # Método principal que controla la conexión y procesamiento de datos
     def readKeys(self):
         file_pri_c = open('./privKeyUser.txt', 'rb')
         self.priKey = pickle.load(file_pri_c)
@@ -215,17 +354,19 @@ class Controller:
         file_pub_c.close()
     
     # Método principal que controla la conexión y procesamiento de datos
-    
-    
-    
     def run(self):
         self.client.start_listening()
-        self.client.send_data(self.createJson("", "", ""))
         view = View.View()
         
         # Verificar conexión al Servidor
-        time.sleep(1)
-        response = self.client.lastData.get("answer", "")
+        try:
+            self.client.send_data(self.createJson("connection", "", ""))  
+            time.sleep(0.1)
+            response = self.client.lastData.get("answer", "")
+        except:
+            self.run()
+            return
+        
         if response != "200 OK":
             return
         
@@ -240,3 +381,4 @@ class Controller:
 if __name__ == "__main__":
     controller = Controller()
     controller.run()
+    controller.client.close()

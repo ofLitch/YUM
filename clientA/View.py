@@ -22,8 +22,11 @@ class View:
         
         # Iterar sobre las opciones del menú
         options = menu_data.get("options", [])
-        for option in options:
-            print(option)
+        if isinstance(options, list):
+            for option in options:
+                print(option)
+        else:
+            print(options)
         
         # Solicitar selección
         selection = input(menu_data.get("select", "Select an option: "))
@@ -32,6 +35,10 @@ class View:
     def showMsg(self, msg):
         print(msg)
     
-    def showMsgToUser(self):
+    def  showMsgToUser(self):
         msg = input("Write a msg: ")
         return msg
+    
+    def showInfo(self, info):
+        for key, value in info.items():
+            print(f"{key}: {value}")

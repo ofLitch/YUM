@@ -1,8 +1,15 @@
 {
-    "id": "48",
-    "name": "Yolanda",
-    "phone": "321",
-    "timeCreation": "2024-10-01 17:20:42",
-    "friends": {},
+    "id": "53",
+    "name": "Alejandro",
+    "phone": "123",
+    "timeCreation": "23",
+    "friends": {
+        "51": {
+            "id": "51",
+            "name": "Valentina",
+            "phone": "316",
+            "timeCreation": "2024-10-01 21:14:58"
+        }
+    },
     "groups": {}
 }
