@@ -6,6 +6,7 @@ import View
 import rsa
 import time
 import base64
+import asyncio
 
 class Controller:
     def __init__(self):
@@ -192,39 +193,36 @@ class Controller:
                     self.client.send_data(jsonData)
 
                     time.sleep(0.1)
-                    response = view.show_menu(self.client.lastData)  # Name or phone
+                    response = view.show_menu(self.client.lastData) 
                     jsonData = self.createJson("messageUser", "PORT", response)
                     self.client.send_data(jsonData)
 
                     self.readKeys()
-                    time.sleep(0.1)
-                    if self.client.lastData.get('answer') == "200 OK":
-                        view.showMsg("Connection success")
-                        while True:
-                            # Verificar si hay nuevos datos recibidos
-                            if self.lastData != self.client.lastData:
-                                self.lastData = self.client.lastData
+                    time.sleep(1)
+                    msg = False
+                    while True:
+                        # Verificar si hay nuevos datos recibidos
+                        if self.client.isMsg:
+                            # Separar el mensaje cifrado del teléfono
+                            msg = self.client.lastData
+                            print(msg, 1)
+                            print(msg, 1)
+                            # Cargar la llave pública del archivo <phone>KeyPublic.txt
+                            public_key = self.loadPublicKey(id)
 
-                                # Separar el mensaje cifrado del teléfono
-                                encrypted_msg, id = self.parseReceivedData(self.client.lastData)
+                            if public_key and msg:
+                                msg_encrypt, id = msg.split("|||")
+                                print(msg_encrypt, id)
+                                # Descifrar el mensaje usando la llave pública correspondiente
+                                decrypted_msg = rsa.decrypt(encrypted_msg, public_key)
+                                view.showMsg(decrypted_msg.decode('utf-8'))  # Mostrar el mensaje descifrado
+                            else:
+                                print(f"Error: No se encontró la llave pública para el teléfono {id}")
 
-                                # Cargar la llave pública del archivo <phone>KeyPublic.txt
-                                public_key = self.loadPublicKey(id)
+                        msg = view.showMsgToUser() 
+                        encrypted_msg = rsa.encrypt(msg.encode('utf-8'), self.priKey) 
 
-                                if public_key:
-                                    try:
-                                        # Descifrar el mensaje usando la llave pública correspondiente
-                                        decrypted_msg = rsa.decrypt(encrypted_msg, public_key)
-                                        view.showMsg(decrypted_msg.decode('utf-8'))  # Mostrar el mensaje descifrado
-                                    except Exception as e:
-                                        print(f"Error al descifrar el mensaje: {e}")
-                                else:
-                                    print(f"Error: No se encontró la llave pública para el teléfono {id}")
-
-                            msg = view.showMsgToUser() 
-                            encrypted_msg = rsa.encrypt(msg.encode('utf-8'), self.priKey) 
-
-                            self.client.send_data(encrypted_msg + b"|||" + self.infoClient.get('id').encode('utf-8'))
+                        self.client.send_data(encrypted_msg + b"|||" + self.infoClient.get('id').encode('utf-8'))
                 if response == '4':
                     jsonData = self.createJson("readDataUser", "id", self.infoClient.get('id'))
                     self.client.send_data(jsonData)
@@ -323,15 +321,6 @@ class Controller:
                     jsonData = self.createJson("log_in", "id_relationship", responseF)
                     self.client.send_data(jsonData)
 
-            
-    def parseReceivedData(self, data):
-        """Función para dividir el mensaje cifrado y el teléfono."""
-        try:
-            encrypted_msg, id = data.split("|||")
-            return encrypted_msg, id
-        except ValueError:
-            print("Error: El formato del mensaje recibido es incorrecto.")
-            return None, None
 
     def loadPublicKey(self, id):
         """Función para cargar la llave pública del archivo <id>KeyPublic.txt."""

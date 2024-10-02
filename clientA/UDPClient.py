@@ -26,6 +26,7 @@ class UDPClient:
         self.pubKey = ""
         self.pubKeyB = ""
         self.lastData = ""
+        self.isMsg = False
         print(f"UDP Client initialized for server at {self.server_ip}:{self.server_port}")
 
     def send_data(self, jsonData):
@@ -48,9 +49,24 @@ class UDPClient:
             print("Started listening for messages from the server...")
             while self.listening:
                 data, addr = self.client_socket.recvfrom(buffer_size)
-                jsonData = data.decode('utf-8')
-                self.lastData = json.loads(jsonData)
-                print(f"\nMessage received from {addr}: {data}")
+                self.lastData = data
+                # Intentar decodificar los datos como UTF-8
+                try:
+                    # Intentar cargar el JSON, si falla es porque no es un JSON válido
+                    jsonData = data.decode('utf-8')
+                    try:
+                        self.lastData = json.loads(jsonData)
+                        print(f"\nJSON message received from {addr}: {self.lastData}")
+                    except json.JSONDecodeError:
+                        self.lastData = data
+                        print(f"\nReceived non-JSON message from {addr}: {jsonData}")
+                except UnicodeDecodeError:
+                    # Manejar el caso donde los datos no son UTF-8 o no son JSON
+                    self.lastData = data
+                    self.isMsg = True
+                    print(f"Received non-text data from {addr}: {data}")
+                finally:
+                    self.listening = True
         except Exception as e:
             print(f"Error receiving message: {e}")
 
@@ -63,7 +79,9 @@ class UDPClient:
 
     def stop_listening(self):
         # Stop listening for server messages.
-        
+        print(1)
+        print(1)
+        print(1)
         self.listening = False
         if self.listen_thread.is_alive():
             self.listen_thread.join()  # Wait for the listening thread to finish
@@ -71,7 +89,9 @@ class UDPClient:
 
     def close(self):
         #Close the UDP client socket and stop listening.
-        
+        print(2)
+        print(2)
+        print(2)
         self.stop_listening()
         self.client_socket.close()
         print("UDP Client socket closed.")
